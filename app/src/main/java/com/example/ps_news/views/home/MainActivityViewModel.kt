@@ -54,7 +54,7 @@ class MainActivityViewModel : ViewModel() {
 
             if (code != 200 && code != 201) {
                 Log.e("TAG", "Success : False. Some error occurred")
-                throw Exception("Success : False. Some error occurred")
+                throw Exception("Some error occurred")
                 return
             }
 
