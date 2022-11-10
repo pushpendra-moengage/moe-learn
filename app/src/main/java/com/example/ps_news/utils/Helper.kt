@@ -21,6 +21,7 @@ object Helper {
 
     fun loadImage(iv: ImageView, url: String?) {
         if (url.isNullOrEmpty()) {
+            iv.setImageResource(R.drawable.ic_image_placeholder)
             return
         }
 

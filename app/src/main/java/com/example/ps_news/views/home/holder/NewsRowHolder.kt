@@ -18,15 +18,20 @@ class NewsRowHolder(var view: View, var callback: HolderCallback) : RecyclerView
     private val tvPublishedAt: TextView = view.findViewById(R.id.tv_published_at)
 
     fun setData(data: Article) {
-        tvTitle.text = data.title
+        if(data.title != null)
+            tvTitle.text = data.title
         view.setOnClickListener {
             callback.onNewsClick(data.url)
         }
+
         tvDescription.text = data.description
-        tvAuthorName.text = data.author
-        tvSourceName.text = data.source?.name
+        if(!data.author.isNullOrEmpty())
+            tvAuthorName.text = data.author
+        if(!data.source?.name.isNullOrEmpty())
+            tvSourceName.text = data.source?.name
         Helper.loadImage(ivPicture, data.urlToImage)
-        tvPublishedAt.text = Helper.getElapsedDateTime(data.publishedAt)
+        if(!data.publishedAt.isNullOrEmpty())
+            tvPublishedAt.text = Helper.getElapsedDateTime(data.publishedAt)
     }
 
     interface HolderCallback {

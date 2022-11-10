@@ -9,12 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ps_news.R
 import com.example.ps_news.utils.Constants
 import com.example.ps_news.views.home.MainActivity
 import com.example.ps_news.views.home.MainActivityViewModel
+import com.example.ps_news.views.home.NewsListDiffUtil
 import com.example.ps_news.views.home.adapters.NewsFeedAdapter
 import com.example.ps_news.views.home.models.Article
 
@@ -62,8 +64,11 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
             object : Observer<List<Article>?> {
                 override fun onChanged(list: List<Article>?) {
                     if (list != null) {
-                        adapter.articleList = list
-                        adapter.notifyDataSetChanged()
+
+                        updateRecyclerViewWithDiffUtils(list)
+
+//                        adapter.articleList = list
+//                        adapter.notifyDataSetChanged()
                         mainActivityViewModel.networkState.postValue(Constants.SUCCESS_STATE)
 
                     }
@@ -88,6 +93,16 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
             }
 
         })
+    }
+
+    private fun updateRecyclerViewWithDiffUtils(list: List<Article>) {
+        val diffcallback = NewsListDiffUtil(adapter.articleList, list)
+        val result = DiffUtil.calculateDiff(diffcallback)
+
+        adapter.articleList.clear()
+        adapter.articleList.addAll(list)
+        result.dispatchUpdatesTo(adapter)
+
     }
 
     /**

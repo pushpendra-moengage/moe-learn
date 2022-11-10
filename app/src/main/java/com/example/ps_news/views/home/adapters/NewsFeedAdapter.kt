@@ -10,7 +10,7 @@ import com.example.ps_news.views.home.models.Article
 class NewsFeedAdapter(var callback: AdapterCallback) : RecyclerView.Adapter<NewsRowHolder>(),
     NewsRowHolder.HolderCallback {
 
-    var articleList: List<Article?> = ArrayList<Article>()
+    var articleList: ArrayList<Article> = ArrayList<Article>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsRowHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.vh_news_row, parent, false)
