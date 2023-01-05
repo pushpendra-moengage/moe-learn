@@ -148,8 +148,9 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         }
 
         btnLogout.setOnClickListener {
-            MoECoreHelper.logoutUser(App.application!!)
+//            MoECoreHelper.logoutUser(App.application!!)
             Toast.makeText(context, "Logging out", Toast.LENGTH_SHORT).show()
+            MoEAnalyticsHelper.trackDeviceLocale(requireContext())
         }
 
     }

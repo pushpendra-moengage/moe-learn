@@ -1,12 +1,17 @@
 package com.example.ps_news
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.moengage.core.DataCenter
 import com.moengage.core.LogLevel
+import com.moengage.core.MoECoreHelper
 import com.moengage.core.MoEngage
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.config.LogConfig
+import com.moengage.core.listeners.AppBackgroundListener
+import com.moengage.core.model.AppBackgroundData
 import com.moengage.core.model.AppStatus
 
 class ApplicationClass : Application() {
@@ -41,5 +46,12 @@ class ApplicationClass : Application() {
             // Update
             MoEAnalyticsHelper.setAppStatus(this, AppStatus.UPDATE)
         }
+
+        MoECoreHelper.addAppBackgroundListener(object : AppBackgroundListener {
+            override fun onAppBackground(context: Context, data: AppBackgroundData) {
+                Log.d("MOE_TIMBER", "Going in background")
+            }
+
+        })
     }
 }
