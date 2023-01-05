@@ -145,6 +145,10 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         btnLogin.setOnClickListener {
             MoEAnalyticsHelper.setUniqueId(App.application!!, "123_UNIQUE_USER")
+            MoEAnalyticsHelper.setUserName(App.application!!, "APPLE_MAC")
+            MoEAnalyticsHelper.setLastName(App.application!!, "APPLE_IPAD")
+            MoEAnalyticsHelper.setEmailId(App.application!!, "MAC@CHEEZE.COM")
+            MoEAnalyticsHelper.setMobileNumber(App.application!!, "9090909090")
             Toast.makeText(context, "Logging in", Toast.LENGTH_SHORT).show()
         }
 

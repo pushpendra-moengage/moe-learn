@@ -29,7 +29,7 @@ class ApplicationClass : Application() {
 
         val moEngage = MoEngage.Builder(this, APP_ID)
             .configureLogs(LogConfig(LogLevel.VERBOSE, true))
-            .configureFcm(FcmConfig(false))
+//            .configureFcm(FcmConfig(false))
             .setDataCenter(DataCenter.DATA_CENTER_1)
             .configureNotificationMetaData(NotificationConfig(R.drawable.ic_image_placeholder, R.drawable.ic_image_placeholder))
             .build()
