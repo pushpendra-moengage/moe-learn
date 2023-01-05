@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.utils.Constants
 import com.example.ps_news.views.home.MainActivity
@@ -19,6 +21,8 @@ import com.example.ps_news.views.home.MainActivityViewModel
 import com.example.ps_news.views.home.NewsListDiffUtil
 import com.example.ps_news.views.home.adapters.NewsFeedAdapter
 import com.example.ps_news.views.home.models.Article
+import com.moengage.core.MoECoreHelper
+import com.moengage.core.analytics.MoEAnalyticsHelper
 
 /**
  * This fragment is responsible for showing the list of news feed within itself.
@@ -32,6 +36,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     lateinit var tvOldNewsFirst: TextView
     lateinit var tvNewNewsFirst: TextView
     lateinit var pbNewsFeed: ProgressBar
+    lateinit var btnLogin: TextView
+    lateinit var btnLogout: TextView
     private lateinit var mainActivityViewModel: MainActivityViewModel
     val callback: FragmentCallback by lazy { context as FragmentCallback }
 
@@ -122,6 +128,16 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         rvNewsFeed.adapter = adapter
         rvNewsFeed.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+        btnLogin.setOnClickListener {
+            MoEAnalyticsHelper.setUniqueId(App.application!!, "123_UNIQUE_USER")
+            Toast.makeText(context, "Logging in", Toast.LENGTH_SHORT).show()
+        }
+
+        btnLogout.setOnClickListener {
+            MoECoreHelper.logoutUser(App.application!!)
+            Toast.makeText(context, "Logging out", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun initViews(view: View) {
@@ -129,6 +145,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         tvOldNewsFirst = view.findViewById(R.id.tv_old_news_first)
         tvNewNewsFirst = view.findViewById(R.id.tv_new_news_first)
         pbNewsFeed = view.findViewById(R.id.pb_news_feed)
+        btnLogin = view.findViewById(R.id.tv_login)
+        btnLogout = view.findViewById(R.id.tv_logout)
     }
 
     /**

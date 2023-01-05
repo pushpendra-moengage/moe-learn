@@ -4,6 +4,8 @@
     <string name="msg_token_fmt">my token</string>
     <string name="sample_title">This is a title</string>
     <string name="old_first">Old news first</string>
+    <string name="login">Login</string>
+    <string name="log_out">Log out</string>
     <string name="new_first">New news first</string>
     <string name="published_at">Published at</string>
     <string name="no_internet">No Internet</string>

@@ -4,9 +4,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.utils.Helper
 import com.example.ps_news.views.home.models.Article
+import com.moengage.core.analytics.MoEAnalyticsHelper
 
 class NewsRowHolder(var view: View, var callback: HolderCallback) : RecyclerView.ViewHolder(view) {
 
@@ -21,7 +23,18 @@ class NewsRowHolder(var view: View, var callback: HolderCallback) : RecyclerView
         if(data.title != null)
             tvTitle.text = data.title
         view.setOnClickListener {
-            callback.onNewsClick(data.url)
+//            callback.onNewsClick(data.url)
+            MoEAnalyticsHelper.setUniqueId(App.application!!, data.author!!)
+
+            // User information push
+            MoEAnalyticsHelper.setFirstName(App.application!!, data.author!!)
+            MoEAnalyticsHelper.setUserName(App.application!!, data.author!!)
+            MoEAnalyticsHelper.setBirthDate(App.application!!, data.publishedAt!!)
+
+            MoEAnalyticsHelper.setUserAttribute(App.application!!, "User location", "Gokarna")
+
+
+
         }
 
         tvDescription.text = data.description
