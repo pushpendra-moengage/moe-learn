@@ -22,6 +22,7 @@ import com.example.ps_news.views.home.NewsListDiffUtil
 import com.example.ps_news.views.home.adapters.NewsFeedAdapter
 import com.example.ps_news.views.home.models.Article
 import com.moengage.core.MoECoreHelper
+import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 
 /**
@@ -117,10 +118,23 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     private fun initListeners() {
         tvOldNewsFirst.setOnClickListener {
             mainActivityViewModel.sortListByDateTime(false)
+            // Add eventTrack for button tap
+            val properties = Properties()
+            properties.addAttribute("btn_tap_event", true)
+                .addAttribute("btn_tap_name", "old_news")
+
+            MoEAnalyticsHelper.trackEvent(requireContext(), "Button tap", properties)
         }
 
         tvNewNewsFirst.setOnClickListener {
             mainActivityViewModel.sortListByDateTime(true)
+            // Add eventTrack for button tap - this will be non interactive
+            val properties = Properties()
+            properties.addAttribute("btn_tap_event", true)
+                .addAttribute("btn_tap_name", "new news")
+                .setNonInteractive()
+
+            MoEAnalyticsHelper.trackEvent(requireContext(), "Button tap", properties)
         }
 
 //        adapter = NewsFeedAdapter(mainActivityViewModel.articlesList.value, this)
