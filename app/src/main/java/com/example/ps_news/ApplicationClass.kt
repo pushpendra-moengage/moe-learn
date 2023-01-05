@@ -21,7 +21,6 @@ class ApplicationClass : Application() {
 
     val APP_ID = ""
     val NOT_INSTALLED = -1
-    val CURRENT_VERSION = 1
 
     override fun onCreate() {
         super.onCreate()
@@ -37,16 +36,15 @@ class ApplicationClass : Application() {
         MoEngage.initialiseDefaultInstance(moEngage)
 
         val pref = getSharedPreferences("APP_INFO", MODE_PRIVATE)
-        val versionNo = pref.getInt("CURRENT_APP_VERSION", -1);
+        val versionNo = pref.getInt("CURRENT_APP_VERSION", -1)
+        val appVersion = BuildConfig.VERSION_CODE
 
         if (versionNo == NOT_INSTALLED) {
             // Fresh install
             val edit = pref.edit()
-            edit.putInt("CURRENT_APP_VERSION", 1).apply();
+            edit.putInt("CURRENT_APP_VERSION", appVersion).apply();
             MoEAnalyticsHelper.setAppStatus(this, AppStatus.INSTALL)
-        } else if (BuildConfig.VERSION_CODE == CURRENT_VERSION) {
-            // Normal login
-        } else {
+        } else if (appVersion > versionNo) {
             // Update
             MoEAnalyticsHelper.setAppStatus(this, AppStatus.UPDATE)
         }
