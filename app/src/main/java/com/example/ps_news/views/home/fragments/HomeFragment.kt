@@ -24,6 +24,7 @@ import com.example.ps_news.views.home.models.Article
 import com.moengage.core.MoECoreHelper
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
+import com.moengage.core.enableAndroidIdTracking
 
 /**
  * This fragment is responsible for showing the list of news feed within itself.
@@ -150,7 +151,9 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         btnLogout.setOnClickListener {
 //            MoECoreHelper.logoutUser(App.application!!)
             Toast.makeText(context, "Logging out", Toast.LENGTH_SHORT).show()
-            MoEAnalyticsHelper.trackDeviceLocale(requireContext())
+//            MoEAnalyticsHelper.trackDeviceLocale(requireContext())
+            enableAndroidIdTracking(App.application!!)
+
         }
 
     }

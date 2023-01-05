@@ -8,10 +8,13 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.views.home.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.moengage.firebase.MoEFireBaseHelper
+import com.moengage.pushbase.MoEPushHelper
 
 /**
  *  This class will be handling the notification coming from Firebase
@@ -36,6 +39,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      **/
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+
+        if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data)){
+            MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
+        }
+
         Log.d("TAMATAR", message.notification.toString())
 
         if (message.data.isNotEmpty()) {
@@ -46,7 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d("TAMATAR", "Message notification ${it.body}")
         }
 
-        sendNotification(message)
+//        sendNotification(message)
 
     }
 
@@ -88,7 +96,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("TAMATAR TOKEN", token)
+        Log.d("MOE_TAMATAR TOKEN", token)
+
+        /*
+         On recieving a new token, save it in sharedpref so that it can be used in
+         Application class everytime the app opens
+         */
+        val token_pref_edit = getSharedPreferences("token_pref", MODE_PRIVATE).edit()
+        token_pref_edit.putString("token", token).apply()
+
+        MoEFireBaseHelper.getInstance().passPushToken(App.application!!, token)
+
     }
 
     override fun onDeletedMessages() {

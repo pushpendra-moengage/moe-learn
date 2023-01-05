@@ -8,6 +8,7 @@ import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.utils.Helper
 import com.example.ps_news.views.home.fragments.HomeFragment
+import com.moengage.pushbase.MoEPushHelper
 
 /**
  * Entry point for the app. the viewmodel is created for this activity and will be used in other related fragments
