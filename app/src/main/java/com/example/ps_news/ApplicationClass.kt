@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.firebase.messaging.FirebaseMessaging
 import com.moengage.core.*
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.config.FcmConfig
@@ -96,6 +97,24 @@ class ApplicationClass : Application(), LifecycleEventObserver {
         })
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
+//        FirebaseMessaging.getInstance().token?.let {
+//            if(it.isSuccessful){
+//                val token = it.result
+//                token?.let { token ->
+//                    Log.d("MOE_TOKEN", token)
+//                    MoEFireBaseHelper.getInstance().passPushToken(App.application!!, token)
+//                    Log.d("MOE_TOKEN", token)
+//                }
+//            } else {
+//                Log.d("MOE_TOKEN", it.exception?.message.toString())
+//            }
+//        }
+
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("MOE_TOKEN", it)
+            MoEFireBaseHelper.getInstance().passPushToken(App.application!!, it)
+        }
 
     }
 

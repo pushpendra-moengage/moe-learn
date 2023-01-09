@@ -40,6 +40,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
+        Log.d("MOE_ON_MESSAGE", message.data.toString())
+
         if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data)){
             MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
         }

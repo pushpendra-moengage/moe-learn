@@ -1,6 +1,7 @@
 package com.example.ps_news.views.home.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +22,14 @@ import com.example.ps_news.views.home.MainActivityViewModel
 import com.example.ps_news.views.home.NewsListDiffUtil
 import com.example.ps_news.views.home.adapters.NewsFeedAdapter
 import com.example.ps_news.views.home.models.Article
+import com.google.firebase.messaging.FirebaseMessaging
 import com.moengage.core.MoECoreHelper
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.enableAndroidIdTracking
+import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
+import com.moengage.pushbase.MoEPushHelper
 
 /**
  * This fragment is responsible for showing the list of news feed within itself.
