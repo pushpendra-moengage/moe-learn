@@ -25,6 +25,7 @@ import com.moengage.core.MoECoreHelper
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.enableAndroidIdTracking
+import com.moengage.inapp.MoEInAppHelper
 
 /**
  * This fragment is responsible for showing the list of news feed within itself.
@@ -169,6 +170,11 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         pbNewsFeed = view.findViewById(R.id.pb_news_feed)
         btnLogin = view.findViewById(R.id.tv_login)
         btnLogout = view.findViewById(R.id.tv_logout)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MoEInAppHelper.getInstance().showInApp(context!!)
     }
 
     /**

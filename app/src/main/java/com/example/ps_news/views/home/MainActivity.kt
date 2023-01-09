@@ -1,5 +1,6 @@
 package com.example.ps_news.views.home
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.utils.Helper
 import com.example.ps_news.views.home.fragments.HomeFragment
+import com.moengage.inapp.MoEInAppHelper
 import com.moengage.pushbase.MoEPushHelper
 
 /**
@@ -52,5 +54,15 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
      */
     override fun onNewsClick(url: String?) {
         Helper.openURLInBrowser(this, url)
+    }
+
+    override fun onStart() {
+        super.onStart()
+//        MoEInAppHelper.getInstance().showInApp(this)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        MoEInAppHelper.getInstance().onConfigurationChanged()
     }
 }
