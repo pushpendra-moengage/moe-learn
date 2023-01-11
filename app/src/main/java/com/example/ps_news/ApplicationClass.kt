@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.example.ps_news.utils.MyPushMessageListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.moengage.core.*
 import com.moengage.core.analytics.MoEAnalyticsHelper
@@ -115,6 +116,11 @@ class ApplicationClass : Application(), LifecycleEventObserver {
             Log.d("MOE_TOKEN", it)
             MoEFireBaseHelper.getInstance().passPushToken(App.application!!, it)
         }
+
+//      ----------------
+
+        MoEPushHelper.getInstance().registerMessageListener(MyPushMessageListener())
+
 
     }
 

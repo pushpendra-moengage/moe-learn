@@ -13,6 +13,8 @@ import com.example.ps_news.R
 import com.example.ps_news.views.home.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.moengage.core.Properties
+import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.pushbase.MoEPushHelper
 
@@ -40,11 +42,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        Log.d("MOE_ON_MESSAGE", message.data.toString())
+//        Log.d("MOE_ON_MESSAGE", message.data.toString())
 
         if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data)){
+            if(MoEPushHelper.getInstance().isSilentPush(message.data)){
+//                Log.d("MOE_PUSH_SILENT_DATA", message.data.toString())
+                MoEAnalyticsHelper.trackEvent(App.application!!, "SILENT_PUSH", Properties())
+            }
+//            MoEPushHelper.getInstance().logNotificationReceived(App.application!!, message.data)
+//            MoEPushHelper.getInstance().isSilentPush(message.data)
             MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
         }
+
+        return
 
         Log.d("TAMATAR", message.notification.toString())
 

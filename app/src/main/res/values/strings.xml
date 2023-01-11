@@ -7,6 +7,7 @@
     <string name="login">Login</string>
     <string name="log_out">Log out</string>
     <string name="new_first">New news first</string>
+    <string name="toggle_notification">toggle notification</string>
     <string name="published_at">Published at</string>
     <string name="no_internet">No Internet</string>
     <string name="author">Author</string>

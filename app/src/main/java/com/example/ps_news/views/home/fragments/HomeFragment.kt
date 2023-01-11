@@ -1,5 +1,6 @@
 package com.example.ps_news.views.home.fragments
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,6 +46,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     lateinit var pbNewsFeed: ProgressBar
     lateinit var btnLogin: TextView
     lateinit var btnLogout: TextView
+    lateinit var btnToggleNotification: TextView
     private lateinit var mainActivityViewModel: MainActivityViewModel
     val callback: FragmentCallback by lazy { context as FragmentCallback }
 
@@ -165,6 +167,14 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         }
 
+        btnToggleNotification.setOnClickListener {
+            val pref = (context)?.getSharedPreferences("notification_toggle", MODE_PRIVATE)
+            val switchToggle: Boolean = pref?.getBoolean("show_notification", true) == true
+            pref?.edit()?.putBoolean("show_notification", !switchToggle)?.apply()
+
+            Log.d("MOE_TOGGLE", switchToggle.toString())
+        }
+
     }
 
     private fun initViews(view: View) {
@@ -174,6 +184,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         pbNewsFeed = view.findViewById(R.id.pb_news_feed)
         btnLogin = view.findViewById(R.id.tv_login)
         btnLogout = view.findViewById(R.id.tv_logout)
+        btnToggleNotification = view.findViewById(R.id.tv_toggle)
     }
 
     override fun onResume() {
