@@ -54,7 +54,13 @@ open class MyPushMessageListener(): PushMessageListener() {
     ): NotificationCompat.Builder {
 //        Log.d("SIMILE_TRACK", "onCreateNotification")
 //        Log.d("MOE_CUSTOM_NOTIFICATION", notificationPayload.toString())
-        return MyNotificationManager(context, notificationPayload)
+
+        if(notificationPayload.payload.containsKey("custom_notification") &&
+            notificationPayload.payload.getString("custom_notification") == "true"){
+            return MyNotificationManager(context, notificationPayload)
+        } else {
+            return super.onCreateNotification(context, notificationPayload)
+        }
 
 //        return super.onCreateNotification(context, notificationPayload)
     }
@@ -103,7 +109,7 @@ open class MyPushMessageListener(): PushMessageListener() {
     }
 
     override fun handleCustomAction(context: Context, payload: String) {
-//        Log.d("SIMILE_TRACK", "handleCustomAction")
+        Log.d("SIMILE_TRACK", "handleCustomAction")
         super.handleCustomAction(context, payload)
     }
 
