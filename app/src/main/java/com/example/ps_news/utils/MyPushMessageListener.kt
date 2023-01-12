@@ -16,8 +16,11 @@ import com.example.ps_news.views.home.MainActivity
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.internal.utils.getPendingIntentActivity
+import com.moengage.pushbase.IS_DEFAULT_ACTION
 import com.moengage.pushbase.MoEPushHelper
+import com.moengage.pushbase.NAV_ACTION
 import com.moengage.pushbase.model.NotificationPayload
+import com.moengage.pushbase.model.action.NavigationAction
 import com.moengage.pushbase.push.PushMessageListener
 
 open class MyPushMessageListener(): PushMessageListener() {
@@ -29,7 +32,7 @@ open class MyPushMessageListener(): PushMessageListener() {
 //        Log.d("SIMILE_TRACK", "onNotificationReceivedonReceived")
         super.onNotificationReceived(context, payload)
 //        Log.d("MOE_PUSH_LISTENER_RECEIVED", payload.toString())
-        MoEAnalyticsHelper.trackEvent(context, "MINE_NOTIFICATION_RECEIVED", Properties())
+//        MoEAnalyticsHelper.trackEvent(context, "MINE_NOTIFICATION_RECEIVED", Properties())
     }
 
     override fun isNotificationRequired(context: Context, payload: Bundle): Boolean {
@@ -62,7 +65,7 @@ open class MyPushMessageListener(): PushMessageListener() {
             return super.onCreateNotification(context, notificationPayload)
         }
 
-//        return super.onCreateNotification(context, notificationPayload)
+        return super.onCreateNotification(context, notificationPayload)
     }
 
     override fun customizeNotification(
@@ -84,16 +87,36 @@ open class MyPushMessageListener(): PushMessageListener() {
 //        Log.d("SIMILE_TRACK", "onNotificationClick")
 //        Log.d("MOE_NOTIFY_PAYLOAD", payload.toString())
 //        MoEAnalyticsHelper.trackEvent(activity, "MINE_NOTIFICATION_CLICKED", Properties())
-        var redirectIntent: Intent? = null
-        if(payload.containsKey("open_activity") && payload.getString("open_activity") == "1"){
-            redirectIntent = Intent(activity, MainActivity::class.java)
-        } else {
-            redirectIntent = Intent(activity, Child_activity::class.java)
-        }
+//        var redirectIntent: Intent? = null
+        // -------------------------------------------------- //
+//        if(payload.containsKey("open_activity") && payload.getString("open_activity") == "1"){
+//            redirectIntent = Intent(activity, MainActivity::class.java)
+//        } else {
+//            redirectIntent = Intent(activity, Child_activity::class.java)
+//        }
 
 //        val redirectIntent = Intent(activity, MainActivity::class.java)
-        MoEPushHelper.getInstance().logNotificationClick(activity, payload)
-        activity.startActivity(redirectIntent)
+//        MoEPushHelper.getInstance().logNotificationClick(activity, payload)
+
+//        activity.startActivity(redirectIntent)
+
+        // -------------------------------------------------- //
+
+
+        val isDefaultAction = payload.getBoolean(IS_DEFAULT_ACTION)
+        var redirectIntent: Intent? = null
+        if(isDefaultAction)
+        {
+            Log.d("MOE_NOTIFICATION_CLICK_DEFAULT", payload.toString())
+            redirectIntent = Intent(activity, Child_activity::class.java)
+        } else {
+            Log.d("MOE_NOTIFICATION_CLICK_BUTTON", payload.toString())
+            redirectIntent = Intent(activity, MainActivity::class.java)
+            val action = payload.getParcelable(NAV_ACTION) as NavigationAction?
+            Log.d("MOE_NOTIFICATION_CLICK_BUTTON_ACTION", action.toString())
+        }
+
+//        activity.startActivity(redirectIntent)
     }
 
     override fun onNotificationCleared(context: Context, payload: Bundle) {
@@ -109,8 +132,13 @@ open class MyPushMessageListener(): PushMessageListener() {
     }
 
     override fun handleCustomAction(context: Context, payload: String) {
-        Log.d("SIMILE_TRACK", "handleCustomAction")
-        super.handleCustomAction(context, payload)
+//        Log.d("MOE_SIMILE_TRACK", "handleCustomAction")
+//        Log.d("MOE_SIMILE_TRACK", payload.toString())
+//        super.handleCustomAction(context, payload)
+        if(payload == "start_child_activity") {
+            val intent = Intent(context, Child_activity::class.java)
+            context.startActivity(intent)
+        }
     }
 
     override fun onNonMoEngageMessageReceived(context: Context, payload: Bundle) {
