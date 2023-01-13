@@ -31,6 +31,8 @@ import com.moengage.core.enableAndroidIdTracking
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
 import com.moengage.inapp.listeners.InAppLifeCycleListener
+import com.moengage.inapp.listeners.OnClickActionListener
+import com.moengage.inapp.model.ClickData
 import com.moengage.inapp.model.InAppData
 import com.moengage.pushbase.MoEPushHelper
 import com.moengage.widgets.NudgeView
@@ -200,7 +202,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         super.onResume()
         MoEInAppHelper.getInstance().showInApp(context!!)
         MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
-
+        MoEInAppHelper.getInstance().setClickActionListener(MyInAppOnClickListener())
 
 
 //        nudge.initialiseNudgeView(activity!!)
@@ -213,6 +215,14 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         override fun onShown(inAppData: InAppData) {
             Log.d("MOE_MINE_INAPP_SHOWN", inAppData.toString())
+        }
+
+    }
+
+    open class MyInAppOnClickListener: OnClickActionListener {
+        override fun onClick(clickData: ClickData): Boolean {
+            Log.d("MOE_MINE_INAPP_CLICK", clickData.toString())
+            return true
         }
 
     }
