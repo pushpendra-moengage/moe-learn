@@ -30,6 +30,8 @@ import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.enableAndroidIdTracking
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
+import com.moengage.inapp.listeners.InAppLifeCycleListener
+import com.moengage.inapp.model.InAppData
 import com.moengage.pushbase.MoEPushHelper
 import com.moengage.widgets.NudgeView
 
@@ -197,7 +199,22 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     override fun onResume() {
         super.onResume()
         MoEInAppHelper.getInstance().showInApp(context!!)
+        MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
+
+
+
 //        nudge.initialiseNudgeView(activity!!)
+    }
+
+    open class MyInAppLifecycleCallbackListener: InAppLifeCycleListener {
+        override fun onDismiss(inAppData: InAppData) {
+            Log.d("MOE_MINE_INAPP_DISMISS", inAppData.toString())
+        }
+
+        override fun onShown(inAppData: InAppData) {
+            Log.d("MOE_MINE_INAPP_SHOWN", inAppData.toString())
+        }
+
     }
 
     /**
