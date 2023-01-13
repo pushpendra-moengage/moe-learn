@@ -39,8 +39,8 @@ open class MyPushMessageListener(): PushMessageListener() {
 //        Log.d("SIMILE_TRACK", "isNotificationRequired")
         val toShowNotification = super.isNotificationRequired(context, payload)
         if(toShowNotification && sharedPrefNotificationhandler(context)){
-//            return true
-            return payloadNotificationhandler(payload, context)
+            return true
+//            return payloadNotificationhandler(payload, context)
         } else {
             return false
         }

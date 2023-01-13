@@ -31,6 +31,7 @@ import com.moengage.core.enableAndroidIdTracking
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
 import com.moengage.pushbase.MoEPushHelper
+import com.moengage.widgets.NudgeView
 
 /**
  * This fragment is responsible for showing the list of news feed within itself.
@@ -49,6 +50,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     lateinit var btnToggleNotification: TextView
     private lateinit var mainActivityViewModel: MainActivityViewModel
     val callback: FragmentCallback by lazy { context as FragmentCallback }
+    lateinit var nudge: NudgeView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -168,11 +170,15 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         }
 
         btnToggleNotification.setOnClickListener {
-            val pref = (context)?.getSharedPreferences("notification_toggle", MODE_PRIVATE)
-            val switchToggle: Boolean = pref?.getBoolean("show_notification", true) == true
-            pref?.edit()?.putBoolean("show_notification", !switchToggle)?.apply()
+//            val pref = (context)?.getSharedPreferences("notification_toggle", MODE_PRIVATE)
+//            val switchToggle: Boolean = pref?.getBoolean("show_notification", true) == true
+//            pref?.edit()?.putBoolean("show_notification", !switchToggle)?.apply()
+//
+//            Log.d("MOE_TOGGLE", switchToggle.toString())
 
-            Log.d("MOE_TOGGLE", switchToggle.toString())
+            MoEAnalyticsHelper.trackEvent(context!!, "notify_button_tap", Properties())
+
+//            nudge.initialiseNudgeView(activity!!)
         }
 
     }
@@ -185,11 +191,13 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         btnLogin = view.findViewById(R.id.tv_login)
         btnLogout = view.findViewById(R.id.tv_logout)
         btnToggleNotification = view.findViewById(R.id.tv_toggle)
+        nudge = view.findViewById(R.id.nudge)
     }
 
     override fun onResume() {
         super.onResume()
         MoEInAppHelper.getInstance().showInApp(context!!)
+//        nudge.initialiseNudgeView(activity!!)
     }
 
     /**
