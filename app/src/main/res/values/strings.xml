@@ -9,6 +9,7 @@
     <string name="new_first">New news first</string>
     <string name="toggle_notification">toggle notification</string>
     <string name="show_inbox">show inbox</string>
+    <string name="moe_inbox_notification_title">News Flash Notification Center</string>
     <string name="published_at">Published at</string>
     <string name="no_internet">No Internet</string>
     <string name="author">Author</string>

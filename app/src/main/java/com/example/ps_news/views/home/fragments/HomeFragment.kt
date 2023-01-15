@@ -195,8 +195,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         btnExtra.setOnClickListener {
             // Inbox with activity
-//            val intent = Intent(activity, InboxActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(activity, InboxActivity::class.java)
+            startActivity(intent)
 
             // Inbox with fragment
 //            parentFragmentManager
@@ -206,7 +206,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 //                .commit()
 
             // Inbox with activity with backtap
-            val intent = Intent(activity, InboxActivity::class.java)
+//            val intent = Intent(activity, InboxActivity::class.java)
         }
 
     }
