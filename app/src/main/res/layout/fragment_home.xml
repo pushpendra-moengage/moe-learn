@@ -101,6 +101,18 @@
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
+            <TextView
+                android:id="@+id/tv_extra"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/margin32"
+                android:layout_marginHorizontal="@dimen/margin4"
+                android:layout_weight="1"
+                android:background="@color/black"
+                android:gravity="center"
+                android:text="@string/show_inbox"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
 
         </LinearLayout>
 

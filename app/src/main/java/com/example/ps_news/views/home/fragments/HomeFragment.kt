@@ -1,6 +1,7 @@
 package com.example.ps_news.views.home.fragments
 
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -32,8 +34,12 @@ import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
 import com.moengage.inapp.listeners.InAppLifeCycleListener
 import com.moengage.inapp.listeners.OnClickActionListener
+import com.moengage.inapp.listeners.SelfHandledAvailableListener
 import com.moengage.inapp.model.ClickData
 import com.moengage.inapp.model.InAppData
+import com.moengage.inapp.model.SelfHandledCampaignData
+import com.moengage.inbox.ui.view.InboxActivity
+import com.moengage.inbox.ui.view.InboxFragment
 import com.moengage.pushbase.MoEPushHelper
 import com.moengage.widgets.NudgeView
 
@@ -52,6 +58,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     lateinit var btnLogin: TextView
     lateinit var btnLogout: TextView
     lateinit var btnToggleNotification: TextView
+    lateinit var btnExtra: TextView
     private lateinit var mainActivityViewModel: MainActivityViewModel
     val callback: FragmentCallback by lazy { context as FragmentCallback }
     lateinit var nudge: NudgeView
@@ -180,9 +187,26 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 //
 //            Log.d("MOE_TOGGLE", switchToggle.toString())
 
-            MoEAnalyticsHelper.trackEvent(context!!, "notify_button_tap", Properties())
+//            MoEAnalyticsHelper.trackEvent(context!!, "notify_button_tap", Properties())
 
 //            nudge.initialiseNudgeView(activity!!)
+
+        }
+
+        btnExtra.setOnClickListener {
+            // Inbox with activity
+//            val intent = Intent(activity, InboxActivity::class.java)
+//            startActivity(intent)
+
+            // Inbox with fragment
+//            parentFragmentManager
+//                .beginTransaction()
+//                .replace(R.id.fragment, InboxFragment())
+//                .addToBackStack("Inbox")
+//                .commit()
+
+            // Inbox with activity with backtap
+            val intent = Intent(activity, InboxActivity::class.java)
         }
 
     }
@@ -195,17 +219,27 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         btnLogin = view.findViewById(R.id.tv_login)
         btnLogout = view.findViewById(R.id.tv_logout)
         btnToggleNotification = view.findViewById(R.id.tv_toggle)
+        btnExtra = view.findViewById(R.id.tv_extra)
         nudge = view.findViewById(R.id.nudge)
     }
 
     override fun onResume() {
         super.onResume()
-        MoEInAppHelper.getInstance().showInApp(context!!)
-        MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
-        MoEInAppHelper.getInstance().setClickActionListener(MyInAppOnClickListener())
+        MoEInAppHelper.getInstance().getSelfHandledInApp(context!!, MySelfHandledInAppAvailableListener())
+//        MoEInAppHelper.getInstance().showInApp(context!!)
+//        MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
+//        MoEInAppHelper.getInstance().setClickActionListener(MyInAppOnClickListener())
 
 
 //        nudge.initialiseNudgeView(activity!!)
+    }
+
+    open class MySelfHandledInAppAvailableListener: SelfHandledAvailableListener{
+        override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
+
+            Log.d("MOE_MINE_INAPP_SELF_HANDLED", data.toString())
+        }
+
     }
 
     open class MyInAppLifecycleCallbackListener: InAppLifeCycleListener {

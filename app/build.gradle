@@ -73,4 +73,8 @@ dependencies {
 
     implementation(moengage.inapp)
 
+    implementation(moengage.pushAmp)
+
+    implementation(moengage.inboxUi)
+
 }
