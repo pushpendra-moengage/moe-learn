@@ -46,6 +46,8 @@ import com.moengage.inapp.model.ClickData
 import com.moengage.inapp.model.InAppData
 import com.moengage.inapp.model.SelfHandledCampaignData
 import com.moengage.inbox.core.MoEInboxHelper
+import com.moengage.inbox.core.listener.OnMessagesAvailableListener
+import com.moengage.inbox.core.model.InboxData
 import com.moengage.inbox.ui.MoEInboxUiHelper
 import com.moengage.inbox.ui.listener.OnMessageClickListener
 import com.moengage.inbox.ui.model.MessageClickData
@@ -212,6 +214,13 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
                 MoEInboxHelper.getInstance().trackMessageClicked(App.application!!, data.inboxMessage)
                 Log.d("MOE_MINE_LISTENER", data.toString())
                 return true
+            }
+
+        })
+
+        MoEInboxHelper.getInstance().fetchAllMessagesAsync(App.application!!, object : OnMessagesAvailableListener{
+            override fun onMessagesAvailable(inboxData: InboxData?) {
+                Log.d("MOE_MINE_INBOX_DATA", inboxData.toString())
             }
 
         })
