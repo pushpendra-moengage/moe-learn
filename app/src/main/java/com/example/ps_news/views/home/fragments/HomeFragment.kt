@@ -26,6 +26,7 @@ import com.example.ps_news.utils.Constants
 import com.example.ps_news.views.home.MainActivity
 import com.example.ps_news.views.home.MainActivityViewModel
 import com.example.ps_news.views.home.NewsListDiffUtil
+import com.example.ps_news.views.home.adapters.MyInboxAdapter
 import com.example.ps_news.views.home.adapters.NewsFeedAdapter
 import com.example.ps_news.views.home.models.Article
 import com.google.firebase.messaging.FirebaseMessaging
@@ -44,6 +45,8 @@ import com.moengage.inapp.listeners.SelfHandledAvailableListener
 import com.moengage.inapp.model.ClickData
 import com.moengage.inapp.model.InAppData
 import com.moengage.inapp.model.SelfHandledCampaignData
+import com.moengage.inbox.core.MoEInboxHelper
+import com.moengage.inbox.ui.MoEInboxUiHelper
 import com.moengage.inbox.ui.view.InboxActivity
 import com.moengage.inbox.ui.view.InboxFragment
 import com.moengage.pushbase.MoEPushHelper
@@ -181,9 +184,10 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         btnLogout.setOnClickListener {
 //            MoECoreHelper.logoutUser(App.application!!)
-            Toast.makeText(context, "Logging out", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Logging out", Toast.LENGTH_SHORT).show()
 //            MoEAnalyticsHelper.trackDeviceLocale(requireContext())
-            enableAndroidIdTracking(App.application!!)
+//            enableAndroidIdTracking(App.application!!)
+            MoECoreHelper.logoutUser(App.application!!)
 
         }
 
@@ -200,11 +204,13 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         }
 
+        MoEInboxUiHelper.getInstance().setInboxAdapter(MyInboxAdapter())
+
         btnExtra.setOnClickListener {
             // Inbox with activity
-//            val intent = Intent(activity, InboxActivity::class.java)
-//            startActivity(intent)
-            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
+            val intent = Intent(activity, InboxActivity::class.java)
+            startActivity(intent)
+//            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
 
             // Inbox with fragment
 //            parentFragmentManager
