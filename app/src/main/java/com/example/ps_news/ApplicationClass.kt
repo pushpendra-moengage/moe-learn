@@ -1,9 +1,12 @@
 package com.example.ps_news
 
+import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -12,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.ps_news.utils.MyPushMessageListener
+import com.example.ps_news.views.home.fragments.HomeFragment
 import com.google.firebase.messaging.FirebaseMessaging
 import com.moengage.core.*
 import com.moengage.core.analytics.MoEAnalyticsHelper
@@ -23,6 +27,9 @@ import com.moengage.core.listeners.AppBackgroundListener
 import com.moengage.core.model.AppBackgroundData
 import com.moengage.core.model.AppStatus
 import com.moengage.firebase.MoEFireBaseHelper
+import com.moengage.inapp.MoEInAppHelper
+import com.moengage.inapp.listeners.SelfHandledAvailableListener
+import com.moengage.inapp.model.SelfHandledCampaignData
 import com.moengage.pushbase.MoEPushHelper
 import com.moengage.pushbase.listener.TokenAvailableListener
 import com.moengage.pushbase.model.Token
@@ -120,6 +127,37 @@ class ApplicationClass : Application(), LifecycleEventObserver {
 //      ----------------
 
         MoEPushHelper.getInstance().registerMessageListener(MyPushMessageListener())
+        MoEInAppHelper.getInstance().setSelfHandledListener(object : SelfHandledAvailableListener {
+            override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
+                Log.e("MOE_MINE_DATA", data.toString())
+
+
+                data?.let {
+                    Toast.makeText(App.application, it.campaign.payload, Toast.LENGTH_LONG).show()
+                    MoEInAppHelper.getInstance().selfHandledShown(App.application!!, it)
+//                    var title = "No title provided"
+//                    title = data.campaign.payload.toString()
+//
+//                    val dialog = AlertDialog.Builder(App.application)
+//                    dialog.setPositiveButton(
+//                        "Yes",
+//                        DialogInterface.OnClickListener { dialogInterface, i ->
+//                            dialogInterface.dismiss()
+//                            MoEInAppHelper.getInstance()
+//                                .selfHandledClicked(App.application as Context, data)
+//                        })
+//                    dialog.setNegativeButton(
+//                        "No",
+//                        DialogInterface.OnClickListener { dialogInterface, i ->
+//                            MoEInAppHelper.getInstance().selfHandledDismissed(App.application as Context, data)
+//                            dialogInterface.dismiss()
+//                        })
+//                    dialog.setTitle(title)
+//
+//                    dialog.show()
+                }
+            }
+        })
 
 
     }

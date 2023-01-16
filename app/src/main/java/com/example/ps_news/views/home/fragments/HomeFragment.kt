@@ -1,6 +1,9 @@
 package com.example.ps_news.views.home.fragments
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,9 +29,12 @@ import com.example.ps_news.views.home.NewsListDiffUtil
 import com.example.ps_news.views.home.adapters.NewsFeedAdapter
 import com.example.ps_news.views.home.models.Article
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.moengage.core.MoECoreHelper
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
+import com.moengage.core.disableAllLogs
 import com.moengage.core.enableAndroidIdTracking
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
@@ -42,6 +48,7 @@ import com.moengage.inbox.ui.view.InboxActivity
 import com.moengage.inbox.ui.view.InboxFragment
 import com.moengage.pushbase.MoEPushHelper
 import com.moengage.widgets.NudgeView
+import org.json.JSONObject
 
 /**
  * This fragment is responsible for showing the list of news feed within itself.
@@ -195,8 +202,9 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         btnExtra.setOnClickListener {
             // Inbox with activity
-            val intent = Intent(activity, InboxActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(activity, InboxActivity::class.java)
+//            startActivity(intent)
+            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
 
             // Inbox with fragment
 //            parentFragmentManager
@@ -225,7 +233,19 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
     override fun onResume() {
         super.onResume()
-        MoEInAppHelper.getInstance().getSelfHandledInApp(context!!, MySelfHandledInAppAvailableListener())
+        MoEInAppHelper.getInstance().getSelfHandledInApp(context!!, object : SelfHandledAvailableListener {
+            override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
+//                val title = getTitle(data)
+                val title: String? = data?.campaign?.payload
+                App.executors.mainThread().execute {
+                    if (title != null) {
+                        val dialog = createAlert(title, data).create()
+                        MoEInAppHelper.getInstance().selfHandledShown(activity as Context, data)
+                        dialog.show()
+                    }
+                }
+            }
+        })
 //        MoEInAppHelper.getInstance().showInApp(context!!)
 //        MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
 //        MoEInAppHelper.getInstance().setClickActionListener(MyInAppOnClickListener())
@@ -234,12 +254,46 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 //        nudge.initialiseNudgeView(activity!!)
     }
 
+    private fun getTitle(data: SelfHandledCampaignData?): Any {
+        var title = "No title provided"
+        val jsonOjb = JSONObject().getJSONObject(data?.campaign?.payload)
+        title = jsonOjb.getString("title")
+
+        if(title.isNullOrBlank())
+            title = "No title provided"
+
+        return title
+    }
+
     open class MySelfHandledInAppAvailableListener: SelfHandledAvailableListener{
         override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
 
             Log.d("MOE_MINE_INAPP_SELF_HANDLED", data.toString())
+
+            if(data?.campaign?.payload?.contains("title") == true) {
+//                val payload = data.campaign.payload
+//                val dataObj = JsonParser.parseString(payload)
+
+            }
+
         }
 
+    }
+
+    public fun createAlert(title: String, data: SelfHandledCampaignData): AlertDialog.Builder {
+        val builder = AlertDialog.Builder(activity)
+        builder.setTitle(title)
+        builder.setPositiveButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+            MoEInAppHelper.getInstance().selfHandledClicked(activity as Context, data)
+            dialogInterface.dismiss()
+        })
+
+        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { d, i ->
+            MoEInAppHelper.getInstance().selfHandledDismissed(activity as Context, data)
+            d.dismiss()
+        })
+
+        return builder
     }
 
     open class MyInAppLifecycleCallbackListener: InAppLifeCycleListener {
