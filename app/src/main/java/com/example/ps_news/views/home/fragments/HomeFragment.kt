@@ -47,6 +47,8 @@ import com.moengage.inapp.model.InAppData
 import com.moengage.inapp.model.SelfHandledCampaignData
 import com.moengage.inbox.core.MoEInboxHelper
 import com.moengage.inbox.ui.MoEInboxUiHelper
+import com.moengage.inbox.ui.listener.OnMessageClickListener
+import com.moengage.inbox.ui.model.MessageClickData
 import com.moengage.inbox.ui.view.InboxActivity
 import com.moengage.inbox.ui.view.InboxFragment
 import com.moengage.pushbase.MoEPushHelper
@@ -205,6 +207,14 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         }
 
         MoEInboxUiHelper.getInstance().setInboxAdapter(MyInboxAdapter())
+        MoEInboxUiHelper.getInstance().setOnMessageClickListener(object : OnMessageClickListener{
+            override fun onMessageClick(data: MessageClickData): Boolean {
+                MoEInboxHelper.getInstance().trackMessageClicked(App.application!!, data.inboxMessage)
+                Log.d("MOE_MINE_LISTENER", data.toString())
+                return true
+            }
+
+        })
 
         btnExtra.setOnClickListener {
             // Inbox with activity

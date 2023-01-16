@@ -30,6 +30,9 @@ class MyInboxAdapter: InboxAdapter() {
         viewHolder.itemView.setOnClickListener {
             inboxListAdapter.onItemClicked(position, inboxMessage)
         }
+        (viewHolder as MyViewHolder).btnDelete.setOnClickListener {
+            inboxListAdapter.deleteItem(position, inboxMessage)
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -41,7 +44,7 @@ class MyInboxAdapter: InboxAdapter() {
 
         private val tvTitle: TextView = view.findViewById(R.id.tv_title)
         private val tvDesc: TextView = view.findViewById(R.id.tv_desc)
-        private val btnDelete: ImageButton = view.findViewById(R.id.ib_delete)
+        val btnDelete: ImageButton = view.findViewById(R.id.ib_delete)
 
 
         fun setdata(inboxMessage: InboxMessage){
