@@ -6,6 +6,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -58,14 +59,20 @@ open class MyPushMessageListener(): PushMessageListener() {
 //        Log.d("SIMILE_TRACK", "onCreateNotification")
 //        Log.d("MOE_CUSTOM_NOTIFICATION", notificationPayload.toString())
 
-        if(notificationPayload.payload.containsKey("custom_notification") &&
-            notificationPayload.payload.getString("custom_notification") == "true"){
-            return MyNotificationManager(context, notificationPayload)
-        } else {
-            return super.onCreateNotification(context, notificationPayload)
-        }
+//        if(notificationPayload.payload.containsKey("custom_notification") &&
+//            notificationPayload.payload.getString("custom_notification") == "true"){
+//            return MyNotificationManager(context, notificationPayload)
+//        } else {
+//            return super.onCreateNotification(context, notificationPayload)
+//        }
 
-        return super.onCreateNotification(context, notificationPayload)
+        val builder = super.onCreateNotification(context, notificationPayload)
+        val soundUri = Uri.parse("android.resource://" + App.application?.packageName + "/" + R.raw.iphone_sound)
+
+        builder.setSound(soundUri)
+        builder.setPriority(NotificationManager.IMPORTANCE_HIGH)
+
+        return builder
     }
 
     override fun customizeNotification(

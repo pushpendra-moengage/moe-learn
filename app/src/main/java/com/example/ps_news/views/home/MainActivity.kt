@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
 
-        createCustomNotificationChannel("SoundReal")
+//        createCustomNotificationChannel("SoundReal")
     }
 
     private fun createCustomNotificationChannel(channelName: String) {
