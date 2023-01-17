@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
@@ -14,9 +15,11 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.ps_news.utils.MyPushMessageListener
 import com.example.ps_news.views.home.fragments.HomeFragment
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
 import com.moengage.core.*
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.config.FcmConfig
@@ -129,11 +132,14 @@ class ApplicationClass : Application(), LifecycleEventObserver {
         MoEPushHelper.getInstance().registerMessageListener(MyPushMessageListener())
         MoEInAppHelper.getInstance().setSelfHandledListener(object : SelfHandledAvailableListener {
             override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
-                Log.e("MOE_MINE_DATA", data.toString())
+                Log.e("MOE_MINE_DATA", Gson().toJson(data))
 
 
                 data?.let {
                     Toast.makeText(App.application, it.campaign.payload, Toast.LENGTH_LONG).show()
+                    val intent = Intent("SHOW_MY_DIALOG")
+                    intent.putExtra("data", Gson().toJson(data))
+                    LocalBroadcastManager.getInstance(this@ApplicationClass).sendBroadcast(intent)
                     MoEInAppHelper.getInstance().selfHandledShown(App.application!!, it)
 //                    var title = "No title provided"
 //                    title = data.campaign.payload.toString()

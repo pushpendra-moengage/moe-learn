@@ -227,9 +227,9 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         btnExtra.setOnClickListener {
             // Inbox with activity
-            val intent = Intent(activity, InboxActivity::class.java)
-            startActivity(intent)
-//            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
+//            val intent = Intent(activity, InboxActivity::class.java)
+//            startActivity(intent)
+            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
 
             // Inbox with fragment
 //            parentFragmentManager

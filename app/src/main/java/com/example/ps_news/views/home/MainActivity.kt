@@ -1,15 +1,25 @@
 package com.example.ps_news.views.home
 
+import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.utils.Helper
 import com.example.ps_news.views.home.fragments.HomeFragment
+import com.google.gson.Gson
 import com.moengage.inapp.MoEInAppHelper
+import com.moengage.inapp.model.SelfHandledCampaign
+import com.moengage.inapp.model.SelfHandledCampaignData
 import com.moengage.pushbase.MoEPushHelper
 
 /**
@@ -19,6 +29,38 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
 
     private val TAG = "com.example.ps_news.views.home.MainActivity"
     lateinit var mainActivityViewModel: MainActivityViewModel
+
+    val receiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            p1?.let {
+//                val data = p1.extras?.getString("data")
+                val data = p1.getStringExtra("data")
+                try {
+                    val obj = Gson().fromJson(data, SelfHandledCampaignData::class.java)
+                    showMyDialog(obj.campaign.payload.toString(), obj).show()
+                    MoEInAppHelper.getInstance().selfHandledShown(App.application!!, obj)
+                } catch (e: java.lang.Exception){
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun showMyDialog(title: String?, data: SelfHandledCampaignData): AlertDialog.Builder {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i ->
+            dialogInterface.dismiss()
+            MoEInAppHelper.getInstance()
+                .selfHandledClicked(App.application as Context, data)
+        })
+        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialogInterface, i ->
+            dialogInterface.dismiss()
+            MoEInAppHelper.getInstance().selfHandledDismissed(App.application as Context, data)
+        })
+
+        return builder
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +72,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
         App.executors.networkIO().execute {
             mainActivityViewModel.fetchNewsData()
         }
+
+        val filter = IntentFilter("SHOW_MY_DIALOG")
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
     }
 
     /**
@@ -47,6 +93,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
                 Helper.openURLInBrowser(this, urlFromPayload)
             }
         }
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
+        super.onDestroy()
     }
 
     /**
