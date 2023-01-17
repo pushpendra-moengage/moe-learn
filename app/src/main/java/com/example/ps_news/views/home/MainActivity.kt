@@ -1,15 +1,20 @@
 package com.example.ps_news.views.home
 
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Configuration
+import android.media.AudioAttributes
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.ps_news.App
@@ -76,6 +81,26 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
         val filter = IntentFilter("SHOW_MY_DIALOG")
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
+
+        createCustomNotificationChannel("SoundReal")
+    }
+
+    private fun createCustomNotificationChannel(channelName: String) {
+        val channel = NotificationChannel(channelName, channelName, NotificationManager.IMPORTANCE_HIGH)
+
+        val soundUri = Uri.parse("android.resource://" + App.application?.packageName + "/" + R.raw.iphone_sound)
+
+        soundUri?.let {
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
+
+            channel.setSound(soundUri, audioAttributes)
+        }
+
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
     }
 
     /**
