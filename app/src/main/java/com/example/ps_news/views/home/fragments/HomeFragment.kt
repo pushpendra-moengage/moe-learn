@@ -229,7 +229,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
             // Inbox with activity
 //            val intent = Intent(activity, InboxActivity::class.java)
 //            startActivity(intent)
-            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
+//            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
 
             // Inbox with fragment
 //            parentFragmentManager
@@ -240,6 +240,11 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
             // Inbox with activity with backtap
 //            val intent = Intent(activity, InboxActivity::class.java)
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment, SecondFragment())
+                .commit()
+
         }
 
     }
@@ -258,25 +263,34 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
     override fun onResume() {
         super.onResume()
-        MoEInAppHelper.getInstance().getSelfHandledInApp(context!!, object : SelfHandledAvailableListener {
-            override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
+
+        MoEInAppHelper.getInstance().setInAppContext(setOf("HomeFragContext"))
+        MoEInAppHelper.getInstance().showInApp(context!!)
+
+//        MoEInAppHelper.getInstance().getSelfHandledInApp(context!!, object : SelfHandledAvailableListener {
+//            override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
 //                val title = getTitle(data)
-                val title: String? = data?.campaign?.payload
-                App.executors.mainThread().execute {
-                    if (title != null) {
-                        val dialog = createAlert(title, data).create()
-                        MoEInAppHelper.getInstance().selfHandledShown(activity as Context, data)
-                        dialog.show()
-                    }
-                }
-            }
-        })
+//                val title: String? = data?.campaign?.payload
+//                App.executors.mainThread().execute {
+//                    if (title != null) {
+//                        val dialog = createAlert(title, data).create()
+//                        MoEInAppHelper.getInstance().selfHandledShown(activity as Context, data)
+//                        dialog.show()
+//                    }
+//                }
+//            }
+//        })
 //        MoEInAppHelper.getInstance().showInApp(context!!)
 //        MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
 //        MoEInAppHelper.getInstance().setClickActionListener(MyInAppOnClickListener())
 
 
 //        nudge.initialiseNudgeView(activity!!)
+    }
+
+    override fun onPause() {
+        MoEInAppHelper.getInstance().resetInAppContext()
+        super.onPause()
     }
 
     private fun getTitle(data: SelfHandledCampaignData?): Any {

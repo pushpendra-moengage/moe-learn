@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ps-news</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment_2">Hello blank fragment 2</string>
+    <string name="hello_blank_fragment_3">Hello blank fragment 3</string>
     <string name="msg_token_fmt">my token</string>
     <string name="sample_title">This is a title</string>
     <string name="old_first">Old news first</string>
