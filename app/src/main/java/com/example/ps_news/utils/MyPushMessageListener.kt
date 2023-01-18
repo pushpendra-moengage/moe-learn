@@ -67,8 +67,8 @@ open class MyPushMessageListener(): PushMessageListener() {
 //        }
 
         val builder = super.onCreateNotification(context, notificationPayload)
-        val soundUri = Uri.parse("android.resource://" + App.application?.packageName + "/" + R.raw.iphone_sound)
-
+        val soundUri = Uri.parse("android.resource://" + App.application?.packageName + "/" + R.raw.beep_beep)
+//
         builder.setSound(soundUri)
         builder.setPriority(NotificationManager.IMPORTANCE_HIGH)
 
