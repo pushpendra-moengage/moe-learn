@@ -7,6 +7,12 @@ plugins {
 android {
     compileSdk 31
 
+    repositories {
+        flatDir {
+            dir 'libs'
+        }
+    }
+
     defaultConfig {
         applicationId "com.example.ps_news"
         minSdk 21
@@ -78,5 +84,8 @@ dependencies {
     implementation(moengage.inboxUi)
 
     implementation(moengage.richNotification)
+
+    implementation(moengage.pushAmpPlus)
+    implementation fileTree(dir: 'libs', includes: ['*.jar', '*.aar'])
 
 }

@@ -33,14 +33,18 @@ import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
 import com.moengage.inapp.listeners.SelfHandledAvailableListener
 import com.moengage.inapp.model.SelfHandledCampaignData
+import com.moengage.push.amp.plus.MiPushHelper
 import com.moengage.pushbase.MoEPushHelper
 import com.moengage.pushbase.listener.TokenAvailableListener
 import com.moengage.pushbase.model.Token
+import com.xiaomi.channel.commonutils.android.Region
 
 class ApplicationClass : Application(), LifecycleEventObserver {
 
     val APP_ID = ""
     val NOT_INSTALLED = -1
+    val appKey = ""
+    val appId = ""
 
     override fun onCreate() {
         super.onCreate()
@@ -60,6 +64,8 @@ class ApplicationClass : Application(), LifecycleEventObserver {
             .build()
 
         MoEngage.initialiseDefaultInstance(moEngage)
+
+        MiPushHelper.initialiseMiPush(App.application!!, appKey, appId, Region.India)
 
         val pref = getSharedPreferences("APP_INFO", MODE_PRIVATE)
         val versionNo = pref.getInt("CURRENT_APP_VERSION", -1)
