@@ -196,6 +196,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         }
 
         btnToggleNotification.setOnClickListener {
+
+            MoEAnalyticsHelper.setMobileNumber(App.application!!, "1212121212");
 //            val pref = (context)?.getSharedPreferences("notification_toggle", MODE_PRIVATE)
 //            val switchToggle: Boolean = pref?.getBoolean("show_notification", true) == true
 //            pref?.edit()?.putBoolean("show_notification", !switchToggle)?.apply()
@@ -205,6 +207,9 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 //            MoEAnalyticsHelper.trackEvent(context!!, "notify_button_tap", Properties())
 
 //            nudge.initialiseNudgeView(activity!!)
+
+            val intent = Intent(activity, InboxActivity::class.java)
+            startActivity(intent)
 
         }
 
@@ -218,6 +223,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 
         })
 
+//        getMessages()
+
         MoEInboxHelper.getInstance().fetchAllMessagesAsync(App.application!!, object : OnMessagesAvailableListener{
             override fun onMessagesAvailable(inboxData: InboxData?) {
                 Log.d("MOE_MINE_INBOX_DATA", inboxData.toString())
@@ -226,27 +233,39 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
         })
 
         btnExtra.setOnClickListener {
+
+            getMessages()
             // Inbox with activity
 //            val intent = Intent(activity, InboxActivity::class.java)
 //            startActivity(intent)
 //            MoEAnalyticsHelper.trackEvent(activity!!, "is_rich_tapped", Properties())
 
             // Inbox with fragment
-//            parentFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.fragment, InboxFragment())
-//                .addToBackStack("Inbox")
-//                .commit()
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment, InboxFragment())
+                .addToBackStack("Inbox")
+                .commit()
 
             // Inbox with activity with backtap
 //            val intent = Intent(activity, InboxActivity::class.java)
 
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment, SecondFragment())
-                .commit()
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment, SecondFragment())
+//                .commit()
 
         }
 
+    }
+
+    fun getMessages(){
+        App.executors.networkIO().execute {
+            val inboxMessages = MoEInboxHelper.getInstance().fetchAllMessages(App.application!!)
+
+            inboxMessages?.let { msgs ->
+                Log.d("MoE My Messages", msgs.toString())
+            }
+        }
     }
 
     private fun initViews(view: View) {
@@ -264,8 +283,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     override fun onResume() {
         super.onResume()
 
-        MoEInAppHelper.getInstance().setInAppContext(setOf("HomeFragContext"))
-        MoEInAppHelper.getInstance().showInApp(context!!)
+//        MoEInAppHelper.getInstance().setInAppContext(setOf("HomeFragContext"))
+//        MoEInAppHelper.getInstance().showInApp(context!!)
 
 //        MoEInAppHelper.getInstance().getSelfHandledInApp(context!!, object : SelfHandledAvailableListener {
 //            override fun onSelfHandledAvailable(data: SelfHandledCampaignData?) {
@@ -289,7 +308,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     }
 
     override fun onPause() {
-        MoEInAppHelper.getInstance().resetInAppContext()
+//        MoEInAppHelper.getInstance().resetInAppContext()
         super.onPause()
     }
 
@@ -351,6 +370,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
             Log.d("MOE_MINE_INAPP_CLICK", clickData.toString())
             return true
         }
+
+
 
     }
 

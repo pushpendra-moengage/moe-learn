@@ -13,6 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintHorizontal_weight="1"
-        android:name="com.example.ps_news.views.home.fragments.HomeFragment" />
+        android:name="com.example.ps_news.views.home.fragments.SecondFragment" />
 
 </LinearLayout>

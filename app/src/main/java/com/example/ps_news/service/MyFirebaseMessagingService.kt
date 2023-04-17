@@ -42,17 +42,41 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
+//        if(message.data.size > 0) {
+//            message.data;
+//
+//            if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data)){
+//                MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
+//                return
+//            }
+//        }
+
+
+
 //        Log.d("MOE_ON_MESSAGE", message.data.toString())
 
-        if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data)){
-            if(MoEPushHelper.getInstance().isSilentPush(message.data)){
+        if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data) ||
+            MoEPushHelper.getInstance().isSilentPush(message.data)){
 //                Log.d("MOE_PUSH_SILENT_DATA", message.data.toString())
-                MoEAnalyticsHelper.trackEvent(App.application!!, "SILENT_PUSH", Properties())
+//                MoEAnalyticsHelper.trackEvent(App.application!!, "SILENT_PUSH", Properties())']
+//            getApplica
+                Log.d("MoE RemoteData AP", message.data.toString())
+                MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
+                return
             }
 //            MoEPushHelper.getInstance().logNotificationReceived(App.application!!, message.data)
 //            MoEPushHelper.getInstance().isSilentPush(message.data)
-            MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
-        }
+
+//        if(MoEPushHelper.getInstance().isFromMoEngagePlatform(message.data)){
+//            if(MoEPushHelper.getInstance().isSilentPush(message.data)){
+////                Log.d("MOE_PUSH_SILENT_DATA", message.data.toString())
+//                MoEAnalyticsHelper.trackEvent(App.application!!, "SILENT_PUSH", Properties())
+//                MoEFireBaseHelper.getInstance().passPushPayload(App.application!!, message.data)
+//            }
+////            MoEPushHelper.getInstance().logNotificationReceived(App.application!!, message.data)
+////            MoEPushHelper.getInstance().isSilentPush(message.data)
+//
+//        }
 
         return
 

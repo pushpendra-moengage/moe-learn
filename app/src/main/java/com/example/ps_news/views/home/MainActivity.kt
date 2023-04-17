@@ -1,6 +1,7 @@
 package com.example.ps_news.views.home
 
 import android.app.AlertDialog
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -15,6 +16,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainer
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.ps_news.App
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
 
     private val TAG = "com.example.ps_news.views.home.MainActivity"
     lateinit var mainActivityViewModel: MainActivityViewModel
+    lateinit var fragmentController : FragmentContainerView
 
     val receiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -43,7 +48,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
                 try {
                     val obj = Gson().fromJson(data, SelfHandledCampaignData::class.java)
                     showMyDialog(obj.campaign.payload.toString(), obj).show()
-                    MoEInAppHelper.getInstance().selfHandledShown(App.application!!, obj)
+//                    MoEInAppHelper.getInstance().selfHandledShown(App.application!!, obj)
                 } catch (e: java.lang.Exception){
                     e.printStackTrace()
                 }
@@ -56,12 +61,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
         builder.setTitle(title)
         builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i ->
             dialogInterface.dismiss()
-            MoEInAppHelper.getInstance()
-                .selfHandledClicked(App.application as Context, data)
+//            MoEInAppHelper.getInstance()
+//                .selfHandledClicked(App.application as Context, data)
         })
         builder.setNegativeButton("No", DialogInterface.OnClickListener { dialogInterface, i ->
             dialogInterface.dismiss()
-            MoEInAppHelper.getInstance().selfHandledDismissed(App.application as Context, data)
+//            MoEInAppHelper.getInstance().selfHandledDismissed(App.application as Context, data)
         })
 
         return builder
@@ -70,6 +75,19 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        savedInstanceState?.let {
+            if(savedInstanceState.containsKey("screen")){
+                val screenName = savedInstanceState.get("screen")
+                val fullScreenName = "com.example.ps_news.views.home.fragments.$screenName"
+
+                val FragmentClass = Class.forName(fullScreenName) as Fragment
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, FragmentClass)
+                    .commit()
+            }
+        }
 
         checkForNotificationData()
 
@@ -86,21 +104,29 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
     }
 
     private fun createCustomNotificationChannel(channelName: String) {
-        val channel = NotificationChannel(channelName, channelName, NotificationManager.IMPORTANCE_HIGH)
-
-        val soundUri = Uri.parse("android.resource://" + App.application?.packageName + "/" + R.raw.iphone_sound)
-
-        soundUri?.let {
-            val audioAttributes = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build()
-
-            channel.setSound(soundUri, audioAttributes)
-        }
-
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel)
+
+        val myChannel = manager.getNotificationChannel(channelName)
+        if(myChannel == null) {
+
+
+            val channel =
+                NotificationChannel(channelName, channelName, NotificationManager.IMPORTANCE_HIGH)
+
+            val soundUri =
+                Uri.parse("android.resource://" + App.application?.packageName + "/" + R.raw.iphone_sound)
+
+            soundUri?.let {
+                val audioAttributes = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build()
+
+                channel.setSound(soundUri, audioAttributes)
+            }
+
+            manager.createNotificationChannel(channel)
+        }
     }
 
     /**

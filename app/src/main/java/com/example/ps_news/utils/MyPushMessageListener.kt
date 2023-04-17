@@ -14,6 +14,7 @@ import com.example.ps_news.App
 import com.example.ps_news.R
 import com.example.ps_news.views.home.Child_activity
 import com.example.ps_news.views.home.MainActivity
+import com.moengage.core.PUSH_NOTIFICATION_SHOW_DIALOG
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.internal.utils.getPendingIntentActivity
@@ -90,6 +91,14 @@ open class MyPushMessageListener(): PushMessageListener() {
     }
 
     override fun onNotificationClick(activity: Activity, payload: Bundle) {
+
+//        return
+
+//        if(payload.containsKey(PUSH_NOTIFICATION_SHOW_DIALOG)){
+            super.onNotificationClick(activity, payload)
+//            return
+//        }
+
 //        super.onNotificationClick(activity, payload)
 //        Log.d("SIMILE_TRACK", "onNotificationClick")
 //        Log.d("MOE_NOTIFY_PAYLOAD", payload.toString())
@@ -110,19 +119,19 @@ open class MyPushMessageListener(): PushMessageListener() {
         // -------------------------------------------------- //
 
 
-        val isDefaultAction = payload.getBoolean(IS_DEFAULT_ACTION)
-        var redirectIntent: Intent? = null
-        if(isDefaultAction)
-        {
-            Log.d("MOE_NOTIFICATION_CLICK_DEFAULT", payload.toString())
-            redirectIntent = Intent(activity, Child_activity::class.java)
-        } else {
-            Log.d("MOE_NOTIFICATION_CLICK_BUTTON", payload.toString())
-            redirectIntent = Intent(activity, MainActivity::class.java)
-            val action = payload.getParcelable(NAV_ACTION) as NavigationAction?
-            Log.d("MOE_NOTIFICATION_CLICK_BUTTON_ACTION", action.toString())
-        }
-
+//        val isDefaultAction = payload.getBoolean(IS_DEFAULT_ACTION)
+//        var redirectIntent: Intent? = null
+//        if(isDefaultAction)
+//        {
+//            Log.d("MOE_NOTIFICATION_CLICK_DEFAULT", payload.toString())
+//            redirectIntent = Intent(activity, Child_activity::class.java)
+//        } else {
+//            Log.d("MOE_NOTIFICATION_CLICK_BUTTON", payload.toString())
+//            redirectIntent = Intent(activity, MainActivity::class.java)
+//            val action = payload.getParcelable(NAV_ACTION) as NavigationAction?
+//            Log.d("MOE_NOTIFICATION_CLICK_BUTTON_ACTION", action.toString())
+//        }
+//
 //        activity.startActivity(redirectIntent)
     }
 

@@ -20,12 +20,12 @@ class SecondFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        MoEInAppHelper.getInstance().setInAppContext(setOf("SecondFrag"))
-        MoEInAppHelper.getInstance().showInApp(context!!)
+//        MoEInAppHelper.getInstance().setInAppContext(setOf("SecondFrag"))
+//        MoEInAppHelper.getInstance().showInApp(context!!)
     }
 
     override fun onPause() {
-        MoEInAppHelper.getInstance().resetInAppContext()
+//        MoEInAppHelper.getInstance().resetInAppContext()
         super.onPause()
     }
 

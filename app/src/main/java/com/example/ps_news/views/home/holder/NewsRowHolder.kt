@@ -34,7 +34,6 @@ class NewsRowHolder(var view: View, var callback: HolderCallback) : RecyclerView
             MoEAnalyticsHelper.setUserAttribute(App.application!!, "User location", "Gokarna")
 
 
-
         }
 
         tvDescription.text = data.description

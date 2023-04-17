@@ -1,11 +1,14 @@
 package com.example.ps_news.views.home.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.ps_news.R
+import com.moengage.core.PUSH_NOTIFICATION_COUPON_CODE
+import com.moengage.core.internal.utils.copyToClipboard
 import com.moengage.inbox.core.model.InboxMessage
 import com.moengage.inbox.ui.adapter.InboxAdapter
 import com.moengage.inbox.ui.adapter.InboxListAdapter
@@ -33,6 +36,14 @@ class MyInboxAdapter: InboxAdapter() {
         (viewHolder as MyViewHolder).btnDelete.setOnClickListener {
             inboxListAdapter.deleteItem(position, inboxMessage)
         }
+
+        (viewHolder as MyViewHolder).itemView.setOnClickListener {
+            if(inboxMessage.payload.has(PUSH_NOTIFICATION_COUPON_CODE)){
+                copyToClipboard(viewHolder.itemView.context, inboxMessage.payload.getString(PUSH_NOTIFICATION_COUPON_CODE))
+            }
+        }
+
+        Log.d("MoE My Inbox Data", inboxMessage.toString())
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {

@@ -20,13 +20,13 @@ class ThirdFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        MoEInAppHelper.getInstance().setInAppContext(setOf("ThirdFrag"))
-        MoEInAppHelper.getInstance().showInApp(context!!)
+//        MoEInAppHelper.getInstance().setInAppContext(setOf("ThirdFrag"))
+//        MoEInAppHelper.getInstance().showInApp(context!!)
     }
 
     override fun onPause() {
         super.onPause()
-        MoEInAppHelper.getInstance().resetInAppContext()
+//        MoEInAppHelper.getInstance().resetInAppContext()
     }
 
     override fun onCreateView(
