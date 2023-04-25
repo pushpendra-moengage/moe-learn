@@ -299,7 +299,8 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
 //                }
 //            }
 //        })
-//        MoEInAppHelper.getInstance().showInApp(context!!)
+        MoEInAppHelper.getInstance().setInAppContext(setOf("Home"))
+        MoEInAppHelper.getInstance().showInApp(context!!)
 //        MoEInAppHelper.getInstance().addInAppLifeCycleListener(MyInAppLifecycleCallbackListener())
 //        MoEInAppHelper.getInstance().setClickActionListener(MyInAppOnClickListener())
 
@@ -308,7 +309,7 @@ class HomeFragment : Fragment(), NewsFeedAdapter.AdapterCallback {
     }
 
     override fun onPause() {
-//        MoEInAppHelper.getInstance().resetInAppContext()
+        MoEInAppHelper.getInstance().resetInAppContext()
         super.onPause()
     }
 

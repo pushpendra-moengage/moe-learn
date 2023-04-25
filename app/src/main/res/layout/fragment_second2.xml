@@ -10,18 +10,24 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:textColor="@color/black"
-        android:text="@string/hello_blank_fragment_2" />
 
-    <Button
-        android:id="@+id/btn_jump_to_third"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Jump to Third Fragment"/>
+        <Button
+            android:id="@+id/btn_jump_to_third"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jump to Third Fragment"/>
+
+        <Button
+            android:id="@+id/btn_start_geo"
+            android:layout_width="match_parent"
+            android:text="Start Geo"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_stop_geo"
+            android:layout_width="match_parent"
+            android:text="End Geo"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

@@ -29,6 +29,7 @@ import com.moengage.core.config.NotificationConfig
 import com.moengage.core.listeners.AppBackgroundListener
 import com.moengage.core.model.AppBackgroundData
 import com.moengage.core.model.AppStatus
+import com.moengage.core.model.IntegrationPartner
 import com.moengage.firebase.MoEFireBaseHelper
 //import com.moengage.geofence.MoEGeofenceHelper
 import com.moengage.inapp.MoEInAppHelper
@@ -39,6 +40,13 @@ import com.moengage.pushbase.MoEPushHelper
 import com.moengage.pushbase.listener.TokenAvailableListener
 import com.moengage.pushbase.model.Token
 import com.xiaomi.channel.commonutils.android.Region
+
+//import com.segment.analytics.kotlin.destinations.moengage.MoEngageDestination
+//import com.segment.analytics.kotlin.android.Analytics
+//import com.segment.analytics.kotlin.core.Analytics
+//import com.segment.analytics.kotlin.core.Traits
+//import kotlinx.serialization.json.buildJsonObject
+//import kotlinx.serialization.json.put
 
 class ApplicationClass : Application(), LifecycleEventObserver {
 
@@ -51,10 +59,18 @@ class ApplicationClass : Application(), LifecycleEventObserver {
         super.onCreate()
         App.init(this)
 
+//        val analytics = Analytics("1fApOtyI8HNfZX5WzjpL2q9fHqT6gaxn", this) {
+//            trackApplicationLifecycleEvents = true
+//            flushAt = 5
+//        }
+//        analytics.add(MoEngageDestination(this))
+
         val moEngage = MoEngage.Builder(this, APP_ID)
             .configureLogs(LogConfig(LogLevel.VERBOSE, true))
-            .configureFcm(FcmConfig(false))
+            .configureFcm(FcmConfig(true))
             .setDataCenter(DataCenter.DATA_CENTER_1)
+//            .enablePartnerIntegration(IntegrationPartner.SEGMENT)
+//            .setDataCenter(DataCenter.DATA_CENTER_4)
             .configureNotificationMetaData(NotificationConfig(R.drawable.ic_hungama_transparent,
                 R.drawable.ic_launcher_hungama,
                 R.color.teal_200,
@@ -65,6 +81,19 @@ class ApplicationClass : Application(), LifecycleEventObserver {
             .build()
 
         MoEngage.initialiseDefaultInstance(moEngage)
+
+//        analytics.identify("Segment 32", buildJsonObject {
+//            put("name", "Charles")
+//            put("Age", 32)
+//        })
+//
+//        analytics.track("View Product", buildJsonObject {
+//            put("productId", 123)
+//            put("productName", "Striped trousers")
+//        });
+
+        MoEAnalyticsHelper.setAppStatus(this, AppStatus.INSTALL)
+//        MoEAnalyticsHelper.setAppStatus(this, AppStatus.UPDATE)
 
         MiPushHelper.initialiseMiPush(App.application!!, appKey, appId, Region.India)
 

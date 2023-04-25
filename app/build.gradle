@@ -23,6 +23,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.example.ps_news"
         minSdk 21
@@ -89,20 +93,25 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.9.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.9.0")
 
-    implementation(moengage.security)
+//    implementation(moengage.security)
 
     implementation(moengage.inapp)
 
     implementation(moengage.pushAmp)
+    implementation(moengage.pushAmpPlus)
 
     implementation(moengage.inboxUi)
+
+    // Segment dependencies
+//    implementation 'com.segment.analytics.kotlin:android:1.10.3'
+//    implementation("com.moengage:moengage-segment-kotlin-destination:1.1.1")
 
 //    implementation(moengage.richNotification)
     implementation "com.moengage:integration-verifier:4.0.0"
     implementation("com.moengage:rich-notification:4.3.1")
 
 
-    implementation(moengage.pushAmpPlus)
+//    implementation(moengage.pushAmpPlus)
     implementation fileTree(dir: 'libs', includes: ['*.jar', '*.aar'])
 
 }

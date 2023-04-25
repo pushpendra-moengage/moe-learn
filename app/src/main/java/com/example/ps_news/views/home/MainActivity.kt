@@ -76,6 +76,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if(intent.extras != null){
+            val extras = intent.extras
+            if(extras!!.containsKey("screen")) { // <-- here screen is the key passed while creating the Push
+                // Add your logic for getting screen name here and to open the required fragment
+            }
+        }
+
         savedInstanceState?.let {
             if(savedInstanceState.containsKey("screen")){
                 val screenName = savedInstanceState.get("screen")
@@ -161,6 +168,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentCallback {
     override fun onStart() {
         super.onStart()
 //        MoEInAppHelper.getInstance().showInApp(this)
+
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
